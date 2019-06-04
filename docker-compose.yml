@@ -17,6 +17,7 @@ services:
       privileged: true
       networks:
         - net-php
+        - net-php56
 
   ### PHP container #########################################
 
@@ -31,11 +32,25 @@ services:
         - ./work/components/php/config/php.ini:/usr/local/etc/php/php.ini:ro
         - ./work/components/php/config/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf:rw
         - ./work/components/php/log:/var/log:rw
-        - ./work/components/php/start.sh:/home/start.sh:rw
       restart: always
       privileged: true
       networks:
         - net-php
+        - net-mysql
+        - net-redis
+
+  php56:
+      build:
+        context: ./build/php56
+      volumes:
+        - ./work/wwwroot:/etc/nginx/html:rw
+        - ./work/components/php/config/php.ini:/usr/local/etc/php/php.ini:ro
+        - ./work/components/php/config/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+        - ./work/components/php/log:/var/log:rw
+      restart: always
+      privileged: true
+      networks:
+        - net-php56
         - net-mysql
         - net-redis
 
@@ -91,5 +106,6 @@ services:
 
 networks:
   net-php:
+  net-php56:
   net-mysql:
   net-redis:
